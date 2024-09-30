@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Api\Categories;
+use App\Http\Controllers\Api\Products;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,7 +22,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::apiResource('profile', Admin::class);
-Route::apiResource('product-categories', Categories::class);
+Route::apiResource('admin', Admin::class);
+Route::apiResource('products-categories', Categories::class);
+Route::apiResource('products', Products::class);
 
 

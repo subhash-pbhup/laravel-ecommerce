@@ -27,12 +27,14 @@ URL::forceScheme('http');
 // });
 
 Route::get('/',[Admin_login::class,'index'])->name('login');
+
 Route::get('/admin',[Admin_login::class,'index'])->name('login');
 Route::post('/login',[Admin_login::class,'login']);
 Route::get('/admin-logout',[Admin_login::class,'logout']);
 Route::get('/profile',[Admin::class,'index'])->name('profile');
 Route::post('/admin-update',[Admin::class,'update'])->name('admin-update');
 Route::get('/dashboard',[Dashboard::class,'index'])->name('dashboard');
+
 Route::get('/product-categories',[Categories::class,'index'])->name('product-categories');
 Route::post('/add-categories',[Categories::class,'add_categories'])->name('add-categories');
 Route::post('/update-categories',[Categories::class,'update_categories'])->name('update-categories');

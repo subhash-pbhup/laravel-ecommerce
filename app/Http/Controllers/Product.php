@@ -71,7 +71,7 @@ class Product extends Controller
             $image = $request->file('image')->store("products", "public");
         } else {
 
-            $image = $request->get('old_img');
+            $image = $request->get('old_image');
         }
 
 
