@@ -1,7 +1,7 @@
 @include('admin/include/header');
 
 <!-- /page content -->
-<?php $admin=$res[0];?>
+<?php $admin = $res[0]; ?>
 
 <div class="right_col" role="main">
     <div class="">
@@ -36,9 +36,11 @@
                     </div>
                     <div class="x_content">
                         <br />
-                        @if(Session::has('message'))
-<div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible"> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a> {{ Session::get('message') }}</div>
-@endif
+                        @if (Session::has('message'))
+                            <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible"> <a
+                                    href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                {{ Session::get('message') }}</div>
+                        @endif
                         <form id="demo-form2" method="POST" action="{{ url('/admin-update') }}"
                             enctype="multipart/form-data" data-parsley-validate class="form-horizontal form-label-left">
                             @csrf
@@ -47,8 +49,8 @@
                                         class="required">*</span>
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <input type="text" name="name" value="<?= $admin->name ?>"
-                                        required="required" class="form-control col-md-7 col-xs-12">
+                                    <input type="text" name="name" value="<?= $admin->name ?>" required="required"
+                                        class="form-control col-md-7 col-xs-12">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -75,7 +77,9 @@
                                     <input class="form-control col-md-7 col-xs-12" type="file" name="img">
                                 </div>
                                 <div class="col-md-2 col-sm-2 col-xs-12">
-                                    <a target="_blank" href="{{ asset('storage/'.$admin->img) }}"><img src="{{ asset('storage/'.$admin->img) }}" style="width: 80px" alt="image"></a>
+                                    <a target="_blank" href="{{ asset('storage/' . $admin->img) }}"><img
+                                            src="{{ asset('storage/' . $admin->img) }}" style="width: 80px"
+                                            alt="image"></a>
                                     <input type="hidden" value="<?= $admin->img ?>" name="old_img">
                                 </div>
                             </div>
@@ -108,8 +112,8 @@
                                         class="required">*</span>
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <input value="<?= $admin->store_name ?>"
-                                        class="form-control col-md-7 col-xs-12" type="text" name="store_name">
+                                    <input value="<?= $admin->store_name ?>" class="form-control col-md-7 col-xs-12"
+                                        type="text" name="store_name">
 
                                 </div>
                             </div>

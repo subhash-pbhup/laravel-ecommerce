@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin_model;
+use App\Models\Categories as ModelsCategories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -9,15 +11,23 @@ class Categories extends Controller
 {
     public function index()
     {
-        $data['res'] = DB::table('admin')->get()->toArray();
-        $data['categories'] = DB::table('categories')->get()->toArray();
+        $admin = session()->get("admin_data");
+        if (!$admin) {
+            return redirect()->route('login');
+        }
+
+
+        $data['res'] = Admin_model::all();
+        $data['categories'] = ModelsCategories::all();
         return view('admin/categories/categories', $data);
     }
 
     public function add_categories(Request $request)
     {
+        date_default_timezone_set("Asia/Calcutta");
+        $time = now()->toDateTimeString();
 
-        $data = array("name" => $request->get('name'), "description" => $request->get('description'));
+        $data = array("name" => $request->get('name'), "description" => $request->get('description'), "created_at" => $time);
 
         $query = DB::table('categories')->insert($data);
 
@@ -36,8 +46,9 @@ class Categories extends Controller
 
     public function update_categories(Request $request)
     {
-
-        $data = array("name" => $request->get('name'), "description" => $request->get('description'),"status" => $request->get('status'));
+        date_default_timezone_set("Asia/Calcutta");
+        $time = now()->toDateTimeString();
+        $data = array("name" => $request->get('name'), "description" => $request->get('description'), "status" => $request->get('status'), "updated_at" => $time);
 
         $query = DB::table('categories')->where(['id' => $request->get('id')])->update($data);
 
@@ -54,7 +65,8 @@ class Categories extends Controller
         }
     }
 
-    public function delete_categories($id){
+    public function delete_categories($id)
+    {
 
         $query = DB::table('categories')->where(['id' => $id])->delete();
 
@@ -70,6 +82,4 @@ class Categories extends Controller
             return redirect()->route('product-categories');
         }
     }
-
-    
 }

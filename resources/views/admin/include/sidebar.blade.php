@@ -6,8 +6,8 @@
                   <ul class="nav side-menu">
                     <li><a><i class="fa fa-home"></i> Products <span class="fa fa-chevron-down"></span></a>
                       <ul class="nav child_menu">
-                        <li><a href="index.html">All Products</a></li>
-                        <li><a href="index2.html">Add New Products</a></li>
+                        <li><a href="{{url('/all-products')}}">All Products</a></li>
+                        {{-- <li><a href="{{url('/add-products')}}">Add New Products</a></li> --}}
                         <li><a href="{{url('/product-categories')}}">Categories</a></li>
                       </ul>
                     </li>
@@ -157,7 +157,7 @@
                     <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
                       <li>
                         <a>
-                          <span class="image"><img src="{{asset("/")}}<?= $admin->img;?>" alt="Profile Image" /></span>
+                          {{-- <span class="image"><img src="{{asset("/")}}<?=// $admin->img;?>" alt="Profile Image" /></span> --}}
                           <span>
                             <span>John Smith</span>
                             <span class="time">3 mins ago</span>

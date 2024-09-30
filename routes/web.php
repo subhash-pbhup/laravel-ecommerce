@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin;
 use App\Http\Controllers\Admin_login;
 use App\Http\Controllers\Categories;
 use App\Http\Controllers\Dashboard;
+use App\Http\Controllers\Product;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 
@@ -37,8 +38,7 @@ Route::post('/add-categories',[Categories::class,'add_categories'])->name('add-c
 Route::post('/update-categories',[Categories::class,'update_categories'])->name('update-categories');
 Route::get('/delete-categories/{id}',[Categories::class,'delete_categories'])->name('delete-categories');
 
-
-// Route::get('/show',[UserController::class,'show'])->name("show");
-// Route::post('/insert',[UserController::class,'insert']);
-// Route::get('/delete/{id}',[UserController::class,'delete']);
-// Route::get('/showuser/{id}',[UserController::class,'showuser']);
+Route::get('/all-products',[Product::class,'index'])->name('all-products');
+Route::post('/add-products',[Product::class,'add_products'])->name('add-products');
+Route::post('/update-products',[Product::class,'update_products'])->name('add-update');
+Route::get('/delete-products/{id}',[Product::class,'delete_products'])->name('delete-update');

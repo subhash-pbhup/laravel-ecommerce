@@ -5,16 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Admin_model;
 
 class Admin extends Controller
 {
     public function index()
     {
-        $data['res'] = DB::table('admin')->get()->toArray();
-
-        // dd($admin_data[0]);
-
-        return view("admin/profile", $data);
+        
+         $data['res'] = Admin_model::all();
+         return view("admin/profile",$data);
     }
 
     public function update(Request $request)
@@ -22,7 +21,6 @@ class Admin extends Controller
 
 
         if ($request->hasFile('img')) {
-            // unlink(url('storage/'.$request->get('old_img')));
            Storage::delete('storage/'.$request->get('old_img'));
             $file = $request->file('img')->store("images", "public");
         } else {

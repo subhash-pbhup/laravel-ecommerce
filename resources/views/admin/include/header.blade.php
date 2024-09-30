@@ -39,6 +39,13 @@
     {{-- jquery --}}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
+    {{-- ckediter --}}
+    <link rel="stylesheet" href="{{asset('vendors/ckediter/ckeditor5.css')}}">
+    <script src="{{asset('ckeditor/ckeditor.js') }}"></script>
+
+
+
+    
 
 </head>
 
@@ -63,7 +70,7 @@
                                 class="img-circle profile_img">
                         </div>
                         <div class="profile_info">
-                            <span>Welcome,</span>
+                            <span>Welcome</span>
                             <h2><?php echo $admin->name; ?></h2>
                         </div>
                     </div>
