@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
+
 class Products extends Controller
 {
     /**
@@ -14,7 +15,7 @@ class Products extends Controller
     public function index()
     {
         return Product::join('categories', 'products.categories_id', '=', 'categories.id')
-            ->select('*', 'products.id as products_id', 'products.name as products_name', 'products.status as products_status', 'products.description as products_description', 'products.created_at as products_created_at', 'products.updated_at as products_updated_at', 'categories.name as categories_name')->orderBy('products.id', 'desc')->get();
+            ->select('*', 'products.id as products_id', 'products.name as products_name', 'products.status as products_status', 'products.description as products_description', 'products.created_at as products_created_at', 'products.updated_at as products_updated_at', 'categories.name as categories_name')->where('products.status',1)->orderBy('products.id', 'desc')->get();
     }
 
     /**
@@ -27,6 +28,39 @@ class Products extends Controller
 
         return response()->json($product, 201);
     }
+
+    // Search products
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+
+        if (!$query) {
+            return response()->json([
+                'error' => 'No search query provided.'
+            ], 400);
+        }
+        $products = Product::where('name', 'LIKE', "%{$query}%")
+            ->orWhere('description', 'LIKE', "%{$query}%")
+            ->get();
+        return response()->json($products);
+    }
+
+    // Search collections
+    public function collections(Request $request)
+    {
+        $query = $request->input('query');
+
+        if (!$query) {
+            return response()->json([
+                'error' => 'No search query provided.'
+            ], 400);
+        }
+
+        $products = Product::join('categories', 'products.categories_id', '=', 'categories.id')
+            ->select('*', 'products.id as products_id', 'products.name as products_name', 'products.status as products_status', 'products.description as products_description', 'products.created_at as products_created_at', 'products.updated_at as products_updated_at', 'categories.name as categories_name')->where('products.categories_id', $query)->orderBy('products.id', 'desc')->get();
+        return response()->json($products);
+    }
+
 
     /**
      * Display the specified resource.

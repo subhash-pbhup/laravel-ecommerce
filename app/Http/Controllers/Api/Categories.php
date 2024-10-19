@@ -13,7 +13,7 @@ class Categories extends Controller
      */
     public function index()
     {
-        return  $data = ModelsCategories::all();
+        return  $data = ModelsCategories::where('status',1)->get();
     }
 
     /**
@@ -31,9 +31,15 @@ class Categories extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $slug)
     {
-        $categories = ModelsCategories::find($id);
+        $categories = ModelsCategories::where('slug', $slug)->get();
+
+        if (!$categories) {
+            return response()->json([
+                'message' => 'Categories not found'
+            ], 404);
+        }
 
         return response()->json($categories, 201);
     }

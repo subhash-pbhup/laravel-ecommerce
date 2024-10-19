@@ -26,8 +26,10 @@ class Categories extends Controller
     {
         date_default_timezone_set("Asia/Calcutta");
         $time = now()->toDateTimeString();
+        $slug = str_replace(' ', '-', strtolower($request->get('name')));
 
-        $data = array("name" => $request->get('name'), "description" => $request->get('description'), "created_at" => $time);
+
+        $data = array("name" => $request->get('name'), "description" => $request->get('description'), "slug" => $slug, "created_at" => $time);
 
         $query = DB::table('categories')->insert($data);
 
@@ -48,7 +50,8 @@ class Categories extends Controller
     {
         date_default_timezone_set("Asia/Calcutta");
         $time = now()->toDateTimeString();
-        $data = array("name" => $request->get('name'), "description" => $request->get('description'), "status" => $request->get('status'), "updated_at" => $time);
+        $slug = str_replace(' ', '-', strtolower($request->get('name')));
+        $data = array("name" => $request->get('name'), "description" => $request->get('description'), "status" => $request->get('status'), "slug" => $slug, "updated_at" => $time);
 
         $query = DB::table('categories')->where(['id' => $request->get('id')])->update($data);
 

@@ -375,7 +375,7 @@
     $("body").on("click", ".view-gallery", function() {
 
         const gallery = $(this).data("gallery_image").split(",");
-        console.log(gallery[0]);
+        // console.log(gallery[0]);
 
         let img = "";
         gallery.map((res) => {

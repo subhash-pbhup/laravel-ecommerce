@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password',8);
             $table->boolean('status')->default(1);
-            $table->rememberToken();
             $table->timestamps();
         });
     }

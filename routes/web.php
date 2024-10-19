@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\Admin_login;
+use App\Http\Controllers\Orders;
 use App\Http\Controllers\Categories;
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Product;
@@ -44,3 +45,6 @@ Route::get('/all-products',[Product::class,'index'])->name('all-products');
 Route::post('/add-products',[Product::class,'add_products'])->name('add-products');
 Route::post('/update-products',[Product::class,'update_products'])->name('add-update');
 Route::get('/delete-products/{id}',[Product::class,'delete_products'])->name('delete-update');
+
+Route::get('/all-orders',[Orders::class,'index'])->name('all-orders');
+
