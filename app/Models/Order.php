@@ -18,6 +18,7 @@ class Order extends Model
         'shipping_address',
         'order_items',
         'order_number',
+        'status',
     ];
 
 }

@@ -15,7 +15,7 @@ class Products extends Controller
     public function index()
     {
         return Product::join('categories', 'products.categories_id', '=', 'categories.id')
-            ->select('*', 'products.id as products_id', 'products.name as products_name', 'products.status as products_status', 'products.description as products_description', 'products.created_at as products_created_at', 'products.updated_at as products_updated_at', 'categories.name as categories_name')->where('products.status',1)->orderBy('products.id', 'desc')->get();
+            ->select('*', 'products.id as products_id', 'products.name as products_name', 'products.status as products_status', 'products.description as products_description', 'products.created_at as products_created_at', 'products.updated_at as products_updated_at', 'categories.name as categories_name')->where('products.status', 1)->orderBy('products.id', 'desc')->get();
     }
 
     /**
@@ -41,8 +41,9 @@ class Products extends Controller
         }
         $products = Product::where('name', 'LIKE', "%{$query}%")
             ->orWhere('description', 'LIKE', "%{$query}%")
+            ->limit(5)
             ->get();
-        return response()->json($products);
+        return response()->json($products, 201);
     }
 
     // Search collections

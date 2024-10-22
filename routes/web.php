@@ -47,4 +47,5 @@ Route::post('/update-products',[Product::class,'update_products'])->name('add-up
 Route::get('/delete-products/{id}',[Product::class,'delete_products'])->name('delete-update');
 
 Route::get('/all-orders',[Orders::class,'index'])->name('all-orders');
+Route::post('/update-orders-status',[Orders::class,'order_status'])->name('update-orders-status');
 

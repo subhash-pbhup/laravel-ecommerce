@@ -18,16 +18,10 @@ class Orders extends Controller
         }
 
         $data['res'] = Admin_model::all();
-        // $data['orders'] = ModelsOrder::get();
-        $data['orders'] = $orders = DB::table('orders')
-        ->join('user', 'orders.user_id', '=', 'user.id')
-        ->select('orders.*', 'user.name as user_name', 'user.email', 'user.address', 'user.mobile')
-        ->get();
-
-    // return response()->json($orders);
-
-        // dd($data);
-        // die;
+        $data['orders'] =  DB::table('orders')
+            ->join('user', 'orders.user_id', '=', 'user.id')
+            ->select('orders.*', 'user.name as user_name', 'user.email', 'user.address', 'user.mobile')->orderBy('orders.id', 'desc')
+            ->get();
 
         return view('admin/products/all-orders', $data);
     }
@@ -38,66 +32,21 @@ class Orders extends Controller
         return view('orders.create');
     }
 
-    // Store a newly created order in storage
-    public function store(Request $request)
+
+    public function order_status(Request $request)
     {
-        // Validate incoming request data
-        $validatedData = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'order_number' => 'required|string|unique:orders,order_number',
-            'subtotal' => 'required|numeric',
-            'tax' => 'required|numeric',
-            'shipping_cost' => 'required|numeric',
-            'total_price' => 'required|numeric',
-            'shipping_address' => 'required|string',
-            'order_items' => 'required|json', // Assuming order items is stored as JSON
-            'status' => 'required|string',
-            'order_date' => 'required|date',
-        ]);
+        date_default_timezone_set("Asia/Calcutta");
+        $time = now()->toDateTimeString();
+        $data = array("status" => $request->get('order_status'),"updated_at" => $time);
 
-        // Create new order
-        ModelsOrder::create($validatedData);
+        $query = DB::table('orders')->where(['id' => $request->get('order_id')])->update($data);
 
-        return redirect()->route('orders.index')->with('success', 'Order created successfully!');
+        if (isset($query)) {
+
+            session()->flash("message", "Order Status Updated sccessfully");
+            session()->flash('alert-class', 'alert-info');
+        }
     }
 
-    // Display the specified order
-    public function show(ModelsOrder $order)
-    {
-        return view('orders.show', compact('order'));
-    }
-
-    // Show the form for editing the specified order
-    public function edit(ModelsOrder $order)
-    {
-        return view('orders.edit', compact('order'));
-    }
-
-    // Update the specified order in storage
-    public function update(Request $request, ModelsOrder $order)
-    {
-        // Validate incoming request data
-        $validatedData = $request->validate([
-            'subtotal' => 'required|numeric',
-            'tax' => 'required|numeric',
-            'shipping_cost' => 'required|numeric',
-            'total_price' => 'required|numeric',
-            'shipping_address' => 'required|string',
-            'order_items' => 'required|json',
-            'status' => 'required|string',
-            'order_date' => 'required|date',
-        ]);
-
-        // Update order
-        $order->update($validatedData);
-
-        return redirect()->route('orders.index')->with('success', 'Order updated successfully!');
-    }
-
-    // Remove the specified order from storage
-    public function destroy(ModelsOrder $order)
-    {
-        $order->delete();
-        return redirect()->route('orders.index')->with('success', 'Order deleted successfully!');
-    }
+    
 }

@@ -7,6 +7,8 @@
 // print_r(json_decode($orders[2]->order_items));
 
 // die();
+
+$order_sta = ['pending', 'shipped', 'processing', 'delivered', 'cancelled', 'returned', 'complete'];
 ?>
 <!-- /page content -->
 
@@ -18,9 +20,7 @@
                 </h3>
             </div>
         </div>
-        <div class="row">
-
-
+        <div class="row myDiv">
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
@@ -41,7 +41,7 @@
                             <thead>
                                 <tr>
                                     <th>Sr.No</th>
-                                    <th>Order Num</th>
+                                    <th>Order ID</th>
                                     <th>Customer name</th>
                                     <th>Billing address</th>
                                     <th>Order price</th>
@@ -56,7 +56,7 @@
                                 @foreach ($orders as $key => $orders_res)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td>{{ $orders_res->id }}</td>
+                                        <td>{{ $orders_res->order_number }}</td>
                                         <td>{{ ucfirst($orders_res->user_name) }}</td>
                                         <td>{{ $orders_res->shipping_address }}</td>
                                         <td>{{ $orders_res->total_price + ($orders_res->subtotal / 100) * $orders_res->tax + $orders_res->shipping_cost }}.00
@@ -65,10 +65,10 @@
                                             <td><span
                                                     class="label label-warning">{{ ucfirst($orders_res->status) }}</span>
                                             @elseif($orders_res->status == 'shipped')
-                                            <td><span class="label label-info">{{ ucfirst($orders_res->status) }}</span>
+                                            <td><span class="label label-success">{{ ucfirst($orders_res->status) }}</span>
                                             @elseif($orders_res->status == 'delivered')
                                             <td><span
-                                                    class="label label-warning">{{ ucfirst($orders_res->status) }}</span>
+                                                    class="label label-info">{{ ucfirst($orders_res->status) }}</span>
                                             @elseif($orders_res->status == 'complete')
                                             <td><span
                                                     class="label label-success">{{ ucfirst($orders_res->status) }}</span>
@@ -78,6 +78,9 @@
                                             @elseif($orders_res->status == 'returned')
                                             <td><span
                                                     class="label label-danger">{{ ucfirst($orders_res->status) }}</span>
+                                                    @elseif($orders_res->status == 'processing')
+                                            <td><span
+                                                    class="label label-info">{{ ucfirst($orders_res->status) }}</span>
                                                 {{-- @else
                                         <td><span class="label label-warning">Order status is unknown.</span>   --}}
                                         @endif
@@ -85,7 +88,15 @@
 
                                         </td>
                                         <td>{{ $orders_res->order_date }}</td>
-                                        <td><a href="#" class="btn btn-sm btn-info view-data" data-toggle="modal"
+                                        
+                                        <td>
+                                            <a data-target="#change-status" data-toggle="modal"
+                                                data-status="{{ $orders_res->status }}"
+                                                data-id="{{ $orders_res->id }}"
+                                                class="btn btn-success btn-sm view-order-status">View</a>
+
+                                            @if($orders_res->status=="complete" ||  $orders_res->status == 'delivered')
+                                            <a href="#" class="btn btn-sm btn-info view-data" data-toggle="modal"
                                                 data-target="#view-product"
                                                 data-user_name="{{ $orders_res->user_name }}"
                                                 data-email="{{ $orders_res->email }}"
@@ -99,11 +110,14 @@
                                                 data-order_items="{{ $orders_res->order_items }}"
                                                 data-order_number="{{ $orders_res->order_number }}"
                                                 data-payment_method="{{ $orders_res->payment_method }}"
-                                                data-shipping_address="{{ $orders_res->shipping_address }}">View</a>
-                                            <a href="{{ url('/delete-products/' . $orders_res->id) }}"
-                                                class="btn btn-sm btn-danger">Delete</a>
+                                                data-shipping_address="{{ $orders_res->shipping_address }}">Invoice</a>
+                                                @endif
+                                            
+                                            {{-- <a href="{{ url('/delete-products/' . $orders_res->id) }}"
+                                                class="btn btn-sm btn-danger">Delete</a> --}}
 
                                         </td>
+                                        
                                     </tr>
                                 @endforeach
 
@@ -121,6 +135,35 @@
 
 
 <!-- Modal Edit form -->
+
+
+<!-- status Edit form -->
+<div class="modal fade" id="change-status" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Status</h4>
+            </div>
+            <div class="modal-body">
+                <form id="status-form" data-parsley-validate method="POST">
+                    @csrf
+                    <label for="fullname">Order Status:</label>
+                    <input type="hidden" id="order_id" name="order_id">
+                    <select style="text-transform: capitalize" onchange="update_status()" id="update_order_status"
+                        name="order_status" class="form-control">
+                        @foreach ($order_sta as $orders_status)
+                            <option value={{ $orders_status }}>{{ $orders_status }}</option>
+                        @endforeach
+                    </select>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 {{-- Add prodcuts form --}}
@@ -302,6 +345,11 @@
 <script>
     const url = "{{ asset('storage/') }}";
 
+    $("body").on("click", ".view-order-status", function() {
+
+        $("#update_order_status").val($(this).data("status"));
+        $("#order_id").val($(this).data("id"));
+    })
     $("body").on("click", ".view-data", function() {
 
 
@@ -309,7 +357,6 @@
         $("#order_number").text($(this).data("order_number"));
         $("#total_price").text(Number($(this).data("total_price")) + $(this).data("subtotal") / 100 * $(this)
             .data("tax") + Number($(this).data("shipping_cost")));
-        // $("#tax").text($(this).data("tax"));
         $("#shipping_cost").text($(this).data("shipping_cost"));
         $("#shipping_address").text($(this).data("shipping_address"));
         $("#order_date").text($(this).data("order_date"));
@@ -344,12 +391,26 @@
         $("#subtotal").text(total);
 
         // console.log($(this).data("subtotal")/100*$(this).data("tax"));
+        
 
 
     })
 
+    function update_status() {
+        let data = $('#status-form').serialize();
+        $.ajax({
+            type: 'POST',
+            url: "{{ url('/update-orders-status') }}",
+            data: data,
+            success: function(res) {
+                $(".myDiv").load(location.href + " .myDiv>*", "");
+                $('#change-status').modal('hide');
+            }
+        })
+    }
+
     // create invoice
-    document.getElementById('generatePDF').addEventListener('click', function() {
+    $("body").on("click", "#generatePDF", function() {
         const {
             jsPDF
         } = window.jspdf;

@@ -24,7 +24,7 @@ class Orders extends Controller
 
         $data = [
             'user_id' => $request->user_id,
-            'order_number' => 0001,
+            'order_number' => "OD".rand(1000,10000),
             'subtotal' => $request->subtotal,
             'tax' => $request->tax,
             'shipping_cost' => $request->shipping_cost,
