@@ -1,4 +1,4 @@
-@include('admin/include/header');
+@include('admin/include/header')
 <?php $admin = $res[0];
 // dd($categories);
 
@@ -389,4 +389,4 @@
 </script>
 
 
-@include('admin/include/footer');
+@include('admin/include/footer')

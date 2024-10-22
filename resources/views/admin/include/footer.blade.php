@@ -1,7 +1,7 @@
 <!-- footer content -->
 <footer>
     <div class="pull-right">
-      Gentelella - Bootstrap Admin Template by <a href="{{url('/admin')}}">Colorlib</a>
+      {{-- Gentelella - Bootstrap Admin Template by <a href="{{url('/admin')}}">Colorlib</a> --}}
     </div>
     <div class="clearfix"></div>
   </footer>

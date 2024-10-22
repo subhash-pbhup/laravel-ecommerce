@@ -1,4 +1,4 @@
-@include('admin/include/header');
+@include('admin/include/header')
 <?php $admin = $res[0];
 // dd($categories);
 // echo "<pre>";
@@ -426,4 +426,4 @@ $order_sta = ['pending', 'shipped', 'processing', 'delivered', 'cancelled', 'ret
 </script>
 
 
-@include('admin/include/footer');
+@include('admin/include/footer')
